@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コード辞典</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#16181c;--card:#1e2126;--line:#2b2f36;
+  --text:#e4e6ea;--dim:#8b929a;
+  --py:#5fd1c0;--js:#f0b429;--accent:#8b7cf6;
+  --ok:#3dbd7d;--ng:#e0615f;
+  --sans:'Noto Sans JP',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;}
+button,input{font-family:inherit;}
+
+/* ---- login ---- */
+#login{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.login-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:36px;width:100%;max-width:380px;}
+.login-card h1{font-size:22px;margin-bottom:4px;text-align:center;}
+.login-card .sub{color:var(--dim);font-size:13px;text-align:center;margin-bottom:24px;}
+.tabs{display:flex;gap:4px;background:var(--bg);border-radius:8px;padding:4px;margin-bottom:20px;}
+.tabs button{flex:1;padding:8px;border:none;background:none;color:var(--dim);border-radius:6px;cursor:pointer;font-size:14px;}
+.tabs button.on{background:var(--card);color:var(--text);}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12px;color:var(--dim);margin-bottom:6px;}
+.field input{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:10px 12px;border-radius:7px;font-size:14px;outline:none;}
+.field input:focus{border-color:var(--accent);}
+#go{width:100%;padding:11px;border:none;border-radius:8px;background:var(--accent);color:#fff;font-size:14px;cursor:pointer;margin-top:4px;}
+#msg{font-size:13px;text-align:center;margin-top:12px;min-height:16px;}
+#msg.err{color:var(--ng);}
+#msg.ok{color:var(--ok);}
+
+/* ---- app shell ---- */
+#app{display:none;flex-direction:column;flex:1;}
+header{padding:16px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+header h1{font-size:18px;}
+.who{font-size:12px;color:var(--dim);margin-left:auto;}
+.who button{background:none;border:none;color:var(--dim);text-decoration:underline;cursor:pointer;font-size:12px;margin-left:8px;}
+nav.tabs2{display:flex;gap:4px;padding:0 24px;border-bottom:1px solid var(--line);}
+nav.tabs2 button{padding:12px 16px;border:none;background:none;color:var(--dim);cursor:pointer;font-size:14px;border-bottom:2px solid transparent;}
+nav.tabs2 button.on{color:var(--accent);border-color:var(--accent);}
+
+/* ---- dict ---- */
+#dict{display:none;flex:1;flex-direction:column;padding:18px 24px 60px;overflow-y:auto;}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+#q{flex:1;min-width:180px;background:var(--card);border:1px solid var(--line);color:var(--text);padding:9px 12px;border-radius:7px;outline:none;font-size:14px;}
+.chip{font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--dim);cursor:pointer;}
+.chip.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+.entry{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.entry-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+.entry-top b{font-size:17px;}
+.entry-top .read{font-family:var(--mono);font-size:12px;color:var(--dim);}
+.entry-top .tag{margin-left:auto;font-size:11px;color:var(--accent);font-family:var(--mono);}
+.entry p{font-size:14px;line-height:1.7;margin-bottom:10px;color:#cfd2d7;}
+.entry p .k{color:#fff;font-weight:600;}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.code{border-radius:7px;overflow:hidden;border:1px solid var(--line);}
+.code .lbl{font-family:var(--mono);font-size:11px;padding:5px 10px;}
+.code.py .lbl{background:#1a3531;color:var(--py);}
+.code.js .lbl{background:#3a300f;color:var(--js);}
+.code pre{background:#101215;padding:10px 12px;font-family:var(--mono);font-size:12.5px;color:#c4cad1;overflow-x:auto;line-height:1.6;}
+.code pre .c{color:#5b626a;}
+.empty{text-align:center;padding:60px 0;color:var(--dim);font-size:13px;}
+
+/* ---- cards ---- */
+#cards{display:none;flex:1;flex-direction:column;align-items:center;padding:24px 16px 60px;}
+.bar{width:100%;max-width:600px;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center;}
+.score{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--dim);}
+.score .o{color:var(--ok);} .score .x{color:var(--ng);}
+.pbar{width:100%;max-width:600px;height:4px;background:var(--line);border-radius:2px;margin-bottom:24px;overflow:hidden;}
+.pbar i{display:block;height:100%;background:var(--accent);width:0;}
+.card{width:100%;max-width:600px;min-height:280px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px;cursor:pointer;display:flex;flex-direction:column;}
+.card .lbl{font-family:var(--mono);font-size:11px;color:var(--dim);margin-bottom:18px;}
+.card .term{font-size:28px;font-weight:700;margin-bottom:6px;}
+.card .read{font-family:var(--mono);font-size:13px;color:var(--dim);}
+.card .hint{margin-top:auto;text-align:center;font-size:13px;color:var(--dim);}
+.card .def{font-size:14px;line-height:1.7;margin-bottom:14px;color:#cfd2d7;}
+.card .def .k{color:#fff;font-weight:600;}
+.answers{width:100%;max-width:600px;display:flex;gap:12px;margin-top:18px;}
+.answers button{flex:1;padding:12px;border-radius:9px;font-size:14px;cursor:pointer;background:none;}
+.answers .no{border:1px solid var(--ng);color:var(--ng);}
+.answers .yes{border:1px solid var(--ok);color:var(--ok);}
+.answers.hide{visibility:hidden;}
+.navrow{display:flex;gap:10px;align-items:center;margin-top:16px;}
+.navrow button{padding:8px 16px;border:1px solid var(--line);background:none;color:var(--dim);border-radius:7px;cursor:pointer;font-size:13px;}
+.navrow button:disabled{opacity:.3;}
+.navrow span{font-family:var(--mono);font-size:13px;color:var(--dim);}
+.done{text-align:center;padding:40px 0;max-width:600px;width:100%;}
+.done h2{font-size:22px;margin-bottom:18px;}
+.done .nums{display:flex;gap:16px;justify-content:center;margin-bottom:24px;}
+.done .nums div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 26px;text-align:center;}
+.done .nums .n{font-family:var(--mono);font-size:28px;font-weight:700;}
+.done .nums .n.o{color:var(--ok);} .done .nums .n.x{color:var(--ng);}
+.done .nums .l{font-size:12px;color:var(--dim);}
+.done button{padding:10px 22px;border-radius:8px;background:var(--accent);border:none;color:#fff;cursor:pointer;font-size:14px;}
+
+/* ---- progress ---- */
+#progress{display:none;flex:1;padding:24px 24px 60px;overflow-y:auto;}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:28px;}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;}
+.stat .n{font-family:var(--mono);font-size:24px;font-weight:700;}
+.stat .l{font-size:12px;color:var(--dim);}
+.row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:7px;padding:9px 12px;margin-bottom:7px;}
+.row span:first-child{flex:1;font-size:14px;}
+.row .b{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:4px;}
+.row .b.o{background:#163528;color:var(--ok);}
+.row .b.x{background:#3a1c1b;color:var(--ng);}
+.row .b.u{background:var(--bg);color:var(--dim);}
+#resetBtn{margin-top:14px;padding:8px 16px;border:1px solid var(--line);background:none;color:var(--dim);border-radius:7px;cursor:pointer;font-size:12px;}
+
+@media(max-width:640px){
+  .pair,.answers{grid-template-columns:1fr;}
+  .answers{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="login-card">
+    <h1>コード辞典</h1>
+    <div class="sub">Python × JavaScript 学習アプリ</div>
+    <div class="tabs">
+      <button id="t-login" class="on" onclick="setTab('login')">ログイン</button>
+      <button id="t-signup" onclick="setTab('signup')">新規登録</button>
+    </div>
+    <div class="field"><label>ユーザー名</label><input id="u" type="text"></div>
+    <div class="field"><label>パスワード</label><input id="p" type="password"></div>
+    <div class="field" id="p2wrap" style="display:none"><label>パスワード（確認）</label><input id="p2" type="password"></div>
+    <button id="go" onclick="go()">ログイン</button>
+    <div id="msg"></div>
+  </div>
+</div>
+
+<div id="app">
+  <header>
+    <h1>コード辞典</h1>
+    <div class="who"><span id="uname"></span><button onclick="logout()">ログアウト</button></div>
+  </header>
+  <nav class="tabs2">
+    <button id="nav-dict" class="on" onclick="showTab('dict')">辞典</button>
+    <button id="nav-cards" onclick="showTab('cards')">単語カード</button>
+    <button id="nav-progress" onclick="showTab('progress')">進捗</button>
+  </nav>
+
+  <div id="dict">
+    <div class="toolbar">
+      <input id="q" placeholder="検索（例: 変数, for）">
+      <div id="chips"></div>
+    </div>
+    <div id="entries"></div>
+  </div>
+
+  <div id="cards">
+    <div class="bar"><div id="cardchips"></div><div class="score" id="score"></div></div>
+    <div class="pbar"><i id="pbar"></i></div>
+    <div class="card" id="card" onclick="flip()"></div>
+    <div class="answers hide" id="answers">
+      <button class="no" onclick="event.stopPropagation();ans(false)">✗ もう一度</button>
+      <button class="yes" onclick="event.stopPropagation();ans(true)">✓ 覚えた</button>
+    </div>
+    <div class="navrow" id="navrow">
+      <button id="prevB" onclick="step(-1)">← 前へ</button>
+      <span id="pos"></span>
+      <button id="nextB" onclick="step(1)">次へ →</button>
+    </div>
+    <div class="done" id="done" style="display:none"></div>
+  </div>
+
+  <div id="progress">
+    <div class="stats" id="stats"></div>
+    <div id="rows"></div>
+    <button id="resetBtn" onclick="resetProgress()">学習記録をリセット</button>
+  </div>
+</div>
+
+<script>
+const TERMS=[
+{cat:"基本構文",term:"変数",read:"へんすう",def:"値に名前をつけて保存する入れ物。Python は <span class=k>代入するだけ</span>で作れるが、JavaScript は <span class=k>let / const</span> で宣言する。",py:"name = \"Taro\"\nage = 16",js:"let name = \"Taro\";\nconst age = 16;"},
+{cat:"基本構文",term:"条件分岐",read:"if文",def:"条件によって処理を分ける構文。Python は <span class=k>コロンとインデント</span>、JavaScript は <span class=k>{ }</span> でブロックを表す。",py:"if age >= 18:\n    print(\"成人\")\nelse:\n    print(\"未成年\")",js:"if (age >= 18) {\n  console.log(\"成人\");\n} else {\n  console.log(\"未成年\");\n}"},
+{cat:"基本構文",term:"forループ",read:"for loop",def:"決まった回数や要素数だけ繰り返す構文。",py:"for i in range(3):\n    print(i)",js:"for (let i = 0; i < 3; i++) {\n  console.log(i);\n}"},
+{cat:"基本構文",term:"whileループ",read:"while loop",def:"条件が真の間、処理を繰り返す構文。",py:"n = 3\nwhile n > 0:\n    print(n)\n    n -= 1",js:"let n = 3;\nwhile (n > 0) {\n  console.log(n);\n  n--;\n}"},
+{cat:"関数",term:"関数",read:"function",def:"処理をまとめて名前をつけ、何度でも呼び出せるようにしたもの。",py:"def greet(name):\n    return f\"こんにちは {name}\"",js:"function greet(name) {\n  return `こんにちは ${name}`;\n}"},
+{cat:"関数",term:"アロー関数",read:"arrow function",def:"JavaScript の短い関数の書き方。Python の <span class=k>lambda</span> が近い。",py:"square = lambda x: x * x",js:"const square = (x) => x * x;"},
+{cat:"関数",term:"デフォルト引数",read:"default parameter",def:"値を渡さなかった場合に使われる引数の初期値。",py:"def greet(name=\"ゲスト\"):\n    print(name)",js:"function greet(name = \"ゲスト\") {\n  console.log(name);\n}"},
+{cat:"データ構造",term:"リスト / 配列",read:"list / array",def:"複数の値を順番に並べる入れ物。",py:"fruits = [\"apple\", \"banana\"]\nfruits.append(\"cherry\")",js:"let fruits = [\"apple\", \"banana\"];\nfruits.push(\"cherry\");"},
+{cat:"データ構造",term:"辞書 / オブジェクト",read:"dict / object",def:"キーと値のペアでデータを保存する入れ物。",py:"person = {\"name\": \"Taro\"}\nprint(person[\"name\"])",js:"let person = { name: \"Taro\" };\nconsole.log(person.name);"},
+{cat:"データ構造",term:"タプル",read:"tuple",def:"変更できない並びのデータ。JavaScriptには専用の型はない。",py:"point = (3, 4)\nx, y = point",js:"const point = [3, 4];\nconst [x, y] = point;"},
+{cat:"オブジェクト指向",term:"クラス",read:"class",def:"オブジェクトの設計図。データとふるまいをまとめて定義する。",py:"class Dog:\n    def __init__(self, name):\n        self.name = name\n    def bark(self):\n        print(f\"{self.name}: ワン\")",js:"class Dog {\n  constructor(name) {\n    this.name = name;\n  }\n  bark() {\n    console.log(`${this.name}: ワン`);\n  }\n}"},
+{cat:"オブジェクト指向",term:"継承",read:"inheritance",def:"既存クラスの機能を引き継いで新しいクラスを作るしくみ。",py:"class Puppy(Dog):\n    pass",js:"class Puppy extends Dog {}"},
+{cat:"エラー処理",term:"例外処理",read:"try/except, try/catch",def:"エラーを捕まえてプログラムが止まらないようにするしくみ。",py:"try:\n    10 / 0\nexcept ZeroDivisionError:\n    print(\"エラー\")",js:"try {\n  10 / 0;\n} catch (e) {\n  console.log(\"エラー\");\n}"},
+{cat:"非同期処理",term:"非同期処理",read:"async/await",def:"処理の完了を待たずに他の処理を進められるしくみ。",py:"import asyncio\nasync def f():\n    await asyncio.sleep(1)",js:"async function f() {\n  await new Promise(r => setTimeout(r, 1000));\n}"},
+{cat:"入出力",term:"標準出力",read:"print",def:"画面に文字や値を表示すること。",py:"print(\"Hello, World!\")",js:"console.log(\"Hello, World!\");"},
+{cat:"入出力",term:"文字列フォーマット",read:"f文字列 / テンプレート",def:"文字列の中に変数の値を埋め込む書き方。",py:"name = \"花子\"\nprint(f\"こんにちは{name}\")",js:"let name = \"花子\";\nconsole.log(`こんにちは${name}`);"},
+{cat:"その他",term:"コメント",read:"comment",def:"動作に影響しない、人間向けのメモ書き。",py:"# コメント\nprint(\"実行される\")",js:"// コメント\nconsole.log(\"実行される\");"},
+{cat:"その他",term:"null的な値",read:"None / null",def:"「値が存在しない」ことを表す特別な値。",py:"value = None",js:"let value = null;"},
+];
+const CATS=[...new Set(TERMS.map(t=>t.cat))];
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const hl=c=>esc(c).replace(/#.*$/gm,m=>`<span class=c>${m}</span>`).replace(/\/\/.*$/gm,m=>`<span class=c>${m}</span>`);
+const codeHtml=(c,l)=>`<div class="code ${l}"><div class="lbl">${l==='py'?'Python':'JavaScript'}</div><pre>${hl(c)}</pre></div>`;
+
+/* ---- auth ---- */
+const users=()=>JSON.parse(localStorage.getItem("cd_users")||"{}");
+const saveUsers=u=>localStorage.setItem("cd_users",JSON.stringify(u));
+let user=null, tab="login";
+function setTab(t){
+  tab=t;
+  document.getElementById("t-login").classList.toggle("on",t==="login");
+  document.getElementById("t-signup").classList.toggle("on",t==="signup");
+  document.getElementById("p2wrap").style.display=t==="signup"?"block":"none";
+  document.getElementById("go").textContent=t==="login"?"ログイン":"アカウント作成";
+  document.getElementById("msg").textContent="";
+}
+function setMsg(t,err){const m=document.getElementById("msg");m.textContent=t;m.className=err?"err":"ok";}
+function go(){
+  const u=document.getElementById("u").value.trim();
+  const p=document.getElementById("p").value;
+  if(!u||!p){setMsg("ユーザー名とパスワードを入力してください",true);return;}
+  const us=users();
+  if(tab==="signup"){
+    const p2=document.getElementById("p2").value;
+    if(p!==p2){setMsg("パスワードが一致しません",true);return;}
+    if(us[u]){setMsg("既に使われているユーザー名です",true);return;}
+    us[u]={p,prog:{}};saveUsers(us);
+    setMsg("作成しました",false);
+    setTimeout(()=>login(u),600);
+  }else{
+    if(!us[u]||us[u].p!==p){setMsg("ユーザー名かパスワードが違います",true);return;}
+    login(u);
+  }
+}
+function login(u){
+  user=u;localStorage.setItem("cd_session",u);
+  document.getElementById("login").style.display="none";
+  document.getElementById("app").style.display="flex";
+  document.getElementById("uname").textContent=u;
+  renderDict();
+}
+function logout(){
+  localStorage.removeItem("cd_session");user=null;
+  document.getElementById("app").style.display="none";
+  document.getElementById("login").style.display="flex";
+  document.getElementById("u").value="";document.getElementById("p").value="";
+}
+
+/* ---- progress ---- */
+function prog(){const us=users();return (us[user]&&us[user].prog)||{};}
+function setProg(term,val){const us=users();us[user].prog[term]=val;saveUsers(us);}
+function resetProgress(){
+  if(!confirm("リセットしますか？"))return;
+  const us=users();us[user].prog={};saveUsers(us);renderProgress();
+}
+
+/* ---- dict tab ---- */
+let cat="すべて",q="";
+function buildChips(){
+  document.getElementById("chips").innerHTML=["すべて",...CATS].map(c=>
+    `<button class="chip${c===cat?" on":""}" onclick="cat='${c}';renderDict()">${c}</button>`).join("");
+}
+function renderDict(){
+  buildChips();
+  const items=TERMS.filter(t=>(cat==="すべて"||t.cat===cat)&&(!q||[t.term,t.read,t.py,t.js].join(" ").toLowerCase().includes(q.toLowerCase())));
+  document.getElementById("entries").innerHTML=items.length?items.map(t=>`
+    <div class="entry">
+      <div class="entry-top"><b>${t.term}</b><span class="read">${t.read}</span><span class="tag">${t.cat}</span></div>
+      <p>${t.def}</p>
+      <div class="pair">${codeHtml(t.py,"py")}${codeHtml(t.js,"js")}</div>
+    </div>`).join(""):`<div class="empty">該当する用語が見つかりません</div>`;
+}
+document.getElementById("q").addEventListener("input",e=>{q=e.target.value;renderDict();});
+
+/* ---- card tab ---- */
+let ccat="すべて",deck=[],idx=0,flipped=false,ok=0,ng=0;
+function buildCardChips(){
+  document.getElementById("cardchips").innerHTML=["すべて",...CATS].map(c=>
+    `<button class="chip${c===ccat?" on":""}" onclick="ccat='${c}';startDeck()">${c}</button>`).join("");
+}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function startDeck(){
+  buildCardChips();
+  deck=shuffle(ccat==="すべて"?TERMS:TERMS.filter(t=>t.cat===ccat));
+  idx=0;ok=0;ng=0;
+  document.getElementById("done").style.display="none";
+  document.getElementById("card").style.display="flex";
+  document.getElementById("answers").style.display="flex";
+  document.getElementById("navrow").style.display="flex";
+  updScore();showCard();
+}
+function updScore(){document.getElementById("score").innerHTML=`<span class=o>✓ ${ok}</span> <span class=x>✗ ${ng}</span>`;}
+function showCard(){
+  if(idx>=deck.length){finish();return;}
+  const t=deck[idx];flipped=false;
+  document.getElementById("card").innerHTML=`<div class="lbl">表（クリックで裏返す）</div><div class="term">${t.term}</div><div class="read">${t.read}</div><div class="hint" style="margin-top:auto">クリックして答えを見る</div>`;
+  document.getElementById("answers").classList.add("hide");
+  document.getElementById("pos").textContent=`${idx+1} / ${deck.length}`;
+  document.getElementById("prevB").disabled=idx===0;
+  document.getElementById("nextB").disabled=idx>=deck.length-1;
+  document.getElementById("pbar").style.width=Math.round(idx/deck.length*100)+"%";
+}
+function flip(){
+  if(idx>=deck.length)return;
+  flipped=!flipped;
+  const t=deck[idx];
+  if(flipped){
+    document.getElementById("card").innerHTML=`<div class="lbl">裏</div><div class="def">${t.def}</div><div class="pair">${codeHtml(t.py,"py")}${codeHtml(t.js,"js")}</div>`;
+    document.getElementById("answers").classList.remove("hide");
+  }else{
+    showCard();
+  }
+}
+function ans(yes){
+  setProg(deck[idx].term,yes?"ok":"ng");
+  if(yes)ok++;else ng++;
+  updScore();
+  if(idx<deck.length-1){idx++;showCard();}else finish();
+}
+function step(d){const n=idx+d;if(n<0||n>=deck.length)return;idx=n;showCard();}
+function finish(){
+  document.getElementById("card").style.display="none";
+  document.getElementById("answers").style.display="none";
+  document.getElementById("navrow").style.display="none";
+  document.getElementById("pbar").style.width="100%";
+  document.getElementById("done").style.display="block";
+  document.getElementById("done").innerHTML=`<h2>セッション完了！</h2>
+    <div class="nums"><div><div class="n o">${ok}</div><div class="l">覚えた</div></div><div><div class="n x">${deck.length-ok}</div><div class="l">もう一度</div></div></div>
+    <button onclick="startDeck()">もう一度やり直す</button>`;
+}
+
+/* ---- progress tab ---- */
+function renderProgress(){
+  const p=prog();const total=TERMS.length;
+  const o=TERMS.filter(t=>p[t.term]==="ok").length;
+  const x=TERMS.filter(t=>p[t.term]==="ng").length;
+  document.getElementById("stats").innerHTML=`
+    <div class="stat"><div class="n">${total}</div><div class="l">総単語数</div></div>
+    <div class="stat"><div class="n" style="color:var(--ok)">${o}</div><div class="l">覚えた</div></div>
+    <div class="stat"><div class="n" style="color:var(--ng)">${x}</div><div class="l">復習中</div></div>
+    <div class="stat"><div class="n">${total-o-x}</div><div class="l">未学習</div></div>`;
+  document.getElementById("rows").innerHTML=TERMS.map(t=>{
+    const s=p[t.term];
+    const b=s==="ok"?'<span class="b o">覚えた</span>':s==="ng"?'<span class="b x">復習中</span>':'<span class="b u">未学習</span>';
+    return `<div class="row"><span>${t.term}</span>${b}</div>`;
+  }).join("");
+}
+
+/* ---- tabs ---- */
+function showTab(t){
+  ["dict","cards","progress"].forEach(x=>{
+    document.getElementById("nav-"+x).classList.toggle("on",x===t);
+    document.getElementById(x).style.display=x===t?"flex":"none";
+  });
+  if(t==="cards"&&deck.length===0)startDeck();
+  if(t==="progress")renderProgress();
+}
+
+/* ---- boot ---- */
+const saved=localStorage.getItem("cd_session");
+if(saved&&users()[saved])login(saved);
+showTab("dict");
+</script>
+</body>
+</html>
