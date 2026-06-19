@@ -7,114 +7,135 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#16181c;--card:#1e2126;--line:#2b2f36;
-  --text:#e4e6ea;--dim:#8b929a;
-  --py:#5fd1c0;--js:#f0b429;--accent:#8b7cf6;
-  --ok:#3dbd7d;--ng:#e0615f;
+  --bg:#f4f8fc;--card:#ffffff;--line:#c2d4e8;--line-soft:#dde9f5;
+  --text:#152233;--dim:#6e8099;
+  --accent:#2f6fed;--accent-soft:#e8f0fe;
+  --ok:#2f9e5c;--ng:#d6493f;
   --sans:'Noto Sans JP',sans-serif;--mono:'JetBrains Mono',monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;line-height:1.5;}
 button,input{font-family:inherit;}
+details>summary{cursor:pointer;}
+details>summary::-webkit-details-marker{display:none;}
 
 /* ---- login ---- */
-#login{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
-.login-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:36px;width:100%;max-width:380px;}
-.login-card h1{font-size:22px;margin-bottom:4px;text-align:center;}
-.login-card .sub{color:var(--dim);font-size:13px;text-align:center;margin-bottom:24px;}
-.tabs{display:flex;gap:4px;background:var(--bg);border-radius:8px;padding:4px;margin-bottom:20px;}
-.tabs button{flex:1;padding:8px;border:none;background:none;color:var(--dim);border-radius:6px;cursor:pointer;font-size:14px;}
-.tabs button.on{background:var(--card);color:var(--text);}
-.field{margin-bottom:14px;}
-.field label{display:block;font-size:12px;color:var(--dim);margin-bottom:6px;}
-.field input{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:10px 12px;border-radius:7px;font-size:14px;outline:none;}
+#login{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;}
+.login-card{width:100%;max-width:360px;padding:32px 28px;border:1px solid var(--line);border-radius:10px;background:var(--card);}
+.login-card h1{font-size:22px;font-weight:700;margin-bottom:6px;text-align:center;}
+.login-card .sub{color:var(--dim);font-size:13px;text-align:center;margin-bottom:32px;}
+.tabs{display:flex;gap:24px;justify-content:center;margin-bottom:28px;border-bottom:1px solid var(--line);}
+.tabs button{padding:0 0 12px;border:none;background:none;color:var(--dim);cursor:pointer;font-size:14px;border-bottom:2px solid transparent;}
+.tabs button.on{color:var(--text);border-color:var(--accent);}
+.field{margin-bottom:18px;}
+.field label{display:block;font-size:12px;color:var(--dim);margin-bottom:8px;}
+.field input{width:100%;background:none;border:1px solid var(--line);border-radius:6px;color:var(--text);padding:9px 10px;font-size:15px;outline:none;}
 .field input:focus{border-color:var(--accent);}
-#go{width:100%;padding:11px;border:none;border-radius:8px;background:var(--accent);color:#fff;font-size:14px;cursor:pointer;margin-top:4px;}
-#msg{font-size:13px;text-align:center;margin-top:12px;min-height:16px;}
+#go{width:100%;padding:13px;border:1px solid var(--accent);border-radius:6px;background:var(--accent);color:#fff;font-size:14px;cursor:pointer;margin-top:14px;}
+#msg{font-size:13px;text-align:center;margin-top:14px;min-height:16px;}
 #msg.err{color:var(--ng);}
 #msg.ok{color:var(--ok);}
 
 /* ---- app shell ---- */
 #app{display:none;flex-direction:column;flex:1;}
-header{padding:16px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
-header h1{font-size:18px;}
+header{padding:22px 32px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);}
+header h1{font-size:18px;font-weight:700;}
 .who{font-size:12px;color:var(--dim);margin-left:auto;}
-.who button{background:none;border:none;color:var(--dim);text-decoration:underline;cursor:pointer;font-size:12px;margin-left:8px;}
-nav.tabs2{display:flex;gap:4px;padding:0 24px;border-bottom:1px solid var(--line);}
-nav.tabs2 button{padding:12px 16px;border:none;background:none;color:var(--dim);cursor:pointer;font-size:14px;border-bottom:2px solid transparent;}
-nav.tabs2 button.on{color:var(--accent);border-color:var(--accent);}
+.who button{background:none;border:none;color:var(--dim);cursor:pointer;font-size:12px;margin-left:10px;}
+.who button:hover{color:var(--text);}
+nav.tabs2{display:flex;gap:28px;padding:0 32px;border-bottom:1px solid var(--line);}
+nav.tabs2 button{padding:14px 0;border:none;background:none;color:var(--dim);cursor:pointer;font-size:14px;border-bottom:2px solid transparent;}
+nav.tabs2 button.on{color:var(--text);border-color:var(--accent);}
+
+/* ---- shared lang toggle ---- */
+.langtoggle{display:flex;gap:6px;}
+.langtoggle button{font-family:var(--mono);font-size:12px;padding:6px 14px;border:1px solid var(--line);background:none;color:var(--dim);cursor:pointer;border-radius:5px;}
+.langtoggle button.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+/* ---- usage guide ---- */
+#guide{background:var(--accent-soft);border-bottom:1px solid var(--line);padding:18px 32px;}
+.guide-inner{max-width:760px;margin:0 auto;display:flex;gap:14px;align-items:flex-start;}
+.guide-text{flex:1;}
+.guide-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.guide-text ul{margin:0;padding-left:18px;font-size:13px;line-height:1.85;color:#334a63;}
+.guide-text strong{color:var(--accent);}
+.guide-close{background:none;border:none;color:var(--dim);cursor:pointer;font-size:18px;line-height:1;padding:2px 4px;}
+.guide-close:hover{color:var(--text);}
 
 /* ---- dict ---- */
-#dict{display:none;flex:1;flex-direction:column;padding:18px 24px 60px;overflow-y:auto;}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
-#q{flex:1;min-width:180px;background:var(--card);border:1px solid var(--line);color:var(--text);padding:9px 12px;border-radius:7px;outline:none;font-size:14px;}
-.chip{font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--dim);cursor:pointer;}
-.chip.on{background:var(--accent);color:#fff;border-color:var(--accent);}
-.entry{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:12px;}
-.entry-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
-.entry-top b{font-size:17px;}
+#dict{display:none;flex:1;flex-direction:column;padding:24px 32px 70px;overflow-y:auto;max-width:760px;width:100%;margin:0 auto;}
+.toolbar{display:flex;flex-direction:column;gap:14px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--line);}
+.toolrow{display:flex;gap:14px;flex-wrap:wrap;align-items:center;width:100%;}
+#q{flex:1;min-width:160px;background:none;border:1px solid var(--line);border-radius:6px;color:var(--text);padding:9px 10px;outline:none;font-size:14px;}
+#q:focus{border-color:var(--accent);}
+.chips{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{font-size:12px;padding:6px 12px;border:1px solid var(--line);background:none;color:var(--dim);cursor:pointer;border-radius:999px;}
+.chip.on{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);}
+.entry{border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin-bottom:14px;}
+.entry-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.entry-top b{font-size:17px;font-weight:700;}
 .entry-top .read{font-family:var(--mono);font-size:12px;color:var(--dim);}
-.entry-top .tag{margin-left:auto;font-size:11px;color:var(--accent);font-family:var(--mono);}
-.entry p{font-size:14px;line-height:1.7;margin-bottom:10px;color:#cfd2d7;}
-.entry p .k{color:#fff;font-weight:600;}
-.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.code{border-radius:7px;overflow:hidden;border:1px solid var(--line);}
-.code .lbl{font-family:var(--mono);font-size:11px;padding:5px 10px;}
-.code.py .lbl{background:#1a3531;color:var(--py);}
-.code.js .lbl{background:#3a300f;color:var(--js);}
-.code pre{background:#101215;padding:10px 12px;font-family:var(--mono);font-size:12.5px;color:#c4cad1;overflow-x:auto;line-height:1.6;}
-.code pre .c{color:#5b626a;}
+.entry-top .tag{margin-left:auto;font-size:11px;color:var(--dim);}
+.entry p{font-size:14px;line-height:1.75;margin-bottom:14px;color:#3a3a3a;}
+.entry p .k{color:var(--text);font-weight:600;}
+.code{border:1px solid var(--line-soft);border-radius:6px;overflow:hidden;}
+.code .lbl{font-family:var(--mono);font-size:11px;color:var(--dim);padding:6px 12px;border-bottom:1px solid var(--line-soft);}
+.code pre{background:#f4f4f4;padding:12px 14px;font-family:var(--mono);font-size:12.5px;color:#2a2a2a;overflow-x:auto;line-height:1.6;}
+.code pre .c{color:#999;}
 .empty{text-align:center;padding:60px 0;color:var(--dim);font-size:13px;}
 
-/* ---- cards ---- */
-#cards{display:none;flex:1;flex-direction:column;align-items:center;padding:24px 16px 60px;}
-.bar{width:100%;max-width:600px;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center;}
+/* ---- learn (cards + progress) ---- */
+#learn{display:none;flex:1;flex-direction:column;align-items:center;padding:30px 16px 70px;}
+.stats{width:100%;max-width:560px;display:flex;gap:24px;flex-wrap:wrap;margin-bottom:22px;padding:16px 18px;border:1px solid var(--line);border-radius:8px;}
+.stat .n{font-family:var(--mono);font-size:20px;font-weight:700;}
+.stat .l{font-size:11px;color:var(--dim);margin-top:2px;}
+.bar{width:100%;max-width:560px;display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px;align-items:center;}
 .score{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--dim);}
 .score .o{color:var(--ok);} .score .x{color:var(--ng);}
-.pbar{width:100%;max-width:600px;height:4px;background:var(--line);border-radius:2px;margin-bottom:24px;overflow:hidden;}
+.pbar{width:100%;max-width:560px;height:3px;background:var(--line-soft);margin-bottom:32px;overflow:hidden;border-radius:2px;}
 .pbar i{display:block;height:100%;background:var(--accent);width:0;}
-.card{width:100%;max-width:600px;min-height:280px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px;cursor:pointer;display:flex;flex-direction:column;}
-.card .lbl{font-family:var(--mono);font-size:11px;color:var(--dim);margin-bottom:18px;}
-.card .term{font-size:28px;font-weight:700;margin-bottom:6px;}
+.card{width:100%;max-width:560px;min-height:280px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:28px 30px;cursor:pointer;display:flex;flex-direction:column;}
+.card .lbl{font-family:var(--mono);font-size:11px;color:var(--dim);margin-bottom:22px;}
+.card .term{font-size:30px;font-weight:700;margin-bottom:8px;}
 .card .read{font-family:var(--mono);font-size:13px;color:var(--dim);}
 .card .hint{margin-top:auto;text-align:center;font-size:13px;color:var(--dim);}
-.card .def{font-size:14px;line-height:1.7;margin-bottom:14px;color:#cfd2d7;}
-.card .def .k{color:#fff;font-weight:600;}
-.answers{width:100%;max-width:600px;display:flex;gap:12px;margin-top:18px;}
-.answers button{flex:1;padding:12px;border-radius:9px;font-size:14px;cursor:pointer;background:none;}
+.card .def{font-size:14px;line-height:1.75;margin-bottom:16px;color:#3a3a3a;}
+.card .def .k{color:var(--text);font-weight:600;}
+.answers{width:100%;max-width:560px;display:flex;gap:12px;margin-top:20px;}
+.answers button{flex:1;padding:13px;border-radius:6px;font-size:14px;cursor:pointer;background:none;}
 .answers .no{border:1px solid var(--ng);color:var(--ng);}
 .answers .yes{border:1px solid var(--ok);color:var(--ok);}
 .answers.hide{visibility:hidden;}
-.navrow{display:flex;gap:10px;align-items:center;margin-top:16px;}
-.navrow button{padding:8px 16px;border:1px solid var(--line);background:none;color:var(--dim);border-radius:7px;cursor:pointer;font-size:13px;}
+.navrow{display:flex;gap:16px;align-items:center;margin-top:18px;}
+.navrow button{padding:8px 14px;border:1px solid var(--line);border-radius:6px;background:none;color:var(--dim);cursor:pointer;font-size:13px;}
+.navrow button:hover:not(:disabled){color:var(--accent);border-color:var(--accent);}
 .navrow button:disabled{opacity:.3;}
 .navrow span{font-family:var(--mono);font-size:13px;color:var(--dim);}
-.done{text-align:center;padding:40px 0;max-width:600px;width:100%;}
-.done h2{font-size:22px;margin-bottom:18px;}
-.done .nums{display:flex;gap:16px;justify-content:center;margin-bottom:24px;}
-.done .nums div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 26px;text-align:center;}
+.done{text-align:center;padding:40px 0;max-width:560px;width:100%;}
+.done h2{font-size:22px;font-weight:700;margin-bottom:24px;}
+.done .nums{display:flex;gap:16px;justify-content:center;margin-bottom:28px;}
+.done .nums div{text-align:center;border:1px solid var(--line);border-radius:8px;padding:14px 24px;}
 .done .nums .n{font-family:var(--mono);font-size:28px;font-weight:700;}
 .done .nums .n.o{color:var(--ok);} .done .nums .n.x{color:var(--ng);}
 .done .nums .l{font-size:12px;color:var(--dim);}
-.done button{padding:10px 22px;border-radius:8px;background:var(--accent);border:none;color:#fff;cursor:pointer;font-size:14px;}
+.done button{padding:11px 24px;border:1px solid var(--accent);border-radius:6px;background:var(--accent);color:#fff;cursor:pointer;font-size:14px;}
 
-/* ---- progress ---- */
-#progress{display:none;flex:1;padding:24px 24px 60px;overflow-y:auto;}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:28px;}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;}
-.stat .n{font-family:var(--mono);font-size:24px;font-weight:700;}
-.stat .l{font-size:12px;color:var(--dim);}
-.row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:7px;padding:9px 12px;margin-bottom:7px;}
+.detail{width:100%;max-width:560px;margin-top:36px;border-top:1px solid var(--line);padding-top:18px;}
+.detail summary{font-size:13px;color:var(--dim);list-style:none;}
+.detail summary:hover{color:var(--text);}
+#rows{margin-top:16px;}
+.row{display:flex;align-items:center;gap:10px;border:1px solid var(--line-soft);border-radius:6px;padding:10px 14px;margin-bottom:8px;}
 .row span:first-child{flex:1;font-size:14px;}
-.row .b{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:4px;}
-.row .b.o{background:#163528;color:var(--ok);}
-.row .b.x{background:#3a1c1b;color:var(--ng);}
-.row .b.u{background:var(--bg);color:var(--dim);}
-#resetBtn{margin-top:14px;padding:8px 16px;border:1px solid var(--line);background:none;color:var(--dim);border-radius:7px;cursor:pointer;font-size:12px;}
+.row .b{font-family:var(--mono);font-size:11px;color:var(--dim);}
+.row .b.o{color:var(--ok);}
+.row .b.x{color:var(--ng);}
+#resetBtn{margin-top:14px;padding:7px 14px;border:1px solid var(--line);border-radius:6px;background:none;color:var(--dim);cursor:pointer;font-size:12px;}
+#resetBtn:hover{border-color:var(--ng);color:var(--ng);}
 
 @media(max-width:640px){
-  .pair,.answers{grid-template-columns:1fr;}
   .answers{flex-direction:column;}
+  header,#dict{padding-left:18px;padding-right:18px;}
+  nav.tabs2{padding-left:18px;padding-right:18px;}
 }
 </style>
 </head>
@@ -139,24 +160,47 @@ nav.tabs2 button.on{color:var(--accent);border-color:var(--accent);}
 <div id="app">
   <header>
     <h1>コード辞典</h1>
-    <div class="who"><span id="uname"></span><button onclick="logout()">ログアウト</button></div>
+    <div class="who"><button onclick="toggleGuide()">使い方</button><span id="uname"></span><button onclick="logout()">ログアウト</button></div>
   </header>
+  <div id="guide" class="guide">
+    <div class="guide-inner">
+      <div class="guide-text">
+        <div class="guide-title">はじめての方へ — このアプリの使い方</div>
+        <ul>
+          <li><strong>辞典</strong>タブ：用語を検索したり、カテゴリで絞り込んで読めます</li>
+          <li><strong>学習</strong>タブ：フラッシュカードで暗記できます。カードをクリックすると答えが表示されます</li>
+          <li>右上の<strong>Python / JavaScript</strong>ボタンで表示言語をいつでも切り替えられます</li>
+          <li>カードで「覚えた」「もう一度」を選ぶと、学習記録が自動的に保存されます</li>
+        </ul>
+      </div>
+      <button class="guide-close" onclick="closeGuide()">×</button>
+    </div>
+  </div>
   <nav class="tabs2">
     <button id="nav-dict" class="on" onclick="showTab('dict')">辞典</button>
-    <button id="nav-cards" onclick="showTab('cards')">単語カード</button>
-    <button id="nav-progress" onclick="showTab('progress')">進捗</button>
+    <button id="nav-learn" onclick="showTab('learn')">学習</button>
   </nav>
 
   <div id="dict">
     <div class="toolbar">
-      <input id="q" placeholder="検索（例: 変数, for）">
-      <div id="chips"></div>
+      <div class="toolrow">
+        <input id="q" placeholder="検索（例: 変数, for）">
+        <div class="langtoggle" id="langtoggle1"></div>
+      </div>
+      <div class="toolrow">
+        <div class="chips" id="chips"></div>
+      </div>
     </div>
     <div id="entries"></div>
   </div>
 
-  <div id="cards">
-    <div class="bar"><div id="cardchips"></div><div class="score" id="score"></div></div>
+  <div id="learn">
+    <div class="stats" id="stats"></div>
+    <div class="bar">
+      <div class="chips" id="cardchips"></div>
+      <div class="langtoggle" id="langtoggle2"></div>
+      <div class="score" id="score"></div>
+    </div>
     <div class="pbar"><i id="pbar"></i></div>
     <div class="card" id="card" onclick="flip()"></div>
     <div class="answers hide" id="answers">
@@ -169,12 +213,12 @@ nav.tabs2 button.on{color:var(--accent);border-color:var(--accent);}
       <button id="nextB" onclick="step(1)">次へ →</button>
     </div>
     <div class="done" id="done" style="display:none"></div>
-  </div>
 
-  <div id="progress">
-    <div class="stats" id="stats"></div>
-    <div id="rows"></div>
-    <button id="resetBtn" onclick="resetProgress()">学習記録をリセット</button>
+    <details class="detail">
+      <summary>学習記録をすべて見る</summary>
+      <div id="rows"></div>
+      <button id="resetBtn" onclick="resetProgress()">学習記録をリセット</button>
+    </details>
   </div>
 </div>
 
@@ -202,7 +246,42 @@ const TERMS=[
 const CATS=[...new Set(TERMS.map(t=>t.cat))];
 const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const hl=c=>esc(c).replace(/#.*$/gm,m=>`<span class=c>${m}</span>`).replace(/\/\/.*$/gm,m=>`<span class=c>${m}</span>`);
-const codeHtml=(c,l)=>`<div class="code ${l}"><div class="lbl">${l==='py'?'Python':'JavaScript'}</div><pre>${hl(c)}</pre></div>`;
+const codeHtml=(t)=>`<div class="code"><div class="lbl">${lang==='py'?'Python':'JavaScript'}</div><pre>${hl(t[lang])}</pre></div>`;
+
+/* ---- language toggle (global, shared by dict & learn) ---- */
+let lang="py";
+function buildLangToggle(id,after){
+  document.getElementById(id).innerHTML=
+    `<button class="${lang==='py'?'on':''}" onclick="setLang('py',${after})">Python</button>
+     <button class="${lang==='js'?'on':''}" onclick="setLang('js',${after})">JavaScript</button>`;
+}
+function setLang(l,which){
+  lang=l;
+  buildLangToggle("langtoggle1");
+  buildLangToggle("langtoggle2");
+  if(which===1)renderDict();
+  if(which===2){ if(flipped) flipBack(); }
+}
+function flipBack(){
+  const t=deck[idx];
+  document.getElementById("card").innerHTML=`<div class="lbl">裏</div><div class="def">${t.def}</div>${codeHtml(t)}`;
+}
+
+/* ---- usage guide ---- */
+function applyGuideState(){
+  const hidden=localStorage.getItem("cd_guide_hidden")==="1";
+  document.getElementById("guide").style.display=hidden?"none":"block";
+}
+function toggleGuide(){
+  const g=document.getElementById("guide");
+  const willShow=g.style.display==="none";
+  g.style.display=willShow?"block":"none";
+  localStorage.setItem("cd_guide_hidden",willShow?"0":"1");
+}
+function closeGuide(){
+  document.getElementById("guide").style.display="none";
+  localStorage.setItem("cd_guide_hidden","1");
+}
 
 /* ---- auth ---- */
 const users=()=>JSON.parse(localStorage.getItem("cd_users")||"{}");
@@ -239,6 +318,9 @@ function login(u){
   document.getElementById("login").style.display="none";
   document.getElementById("app").style.display="flex";
   document.getElementById("uname").textContent=u;
+  applyGuideState();
+  buildLangToggle("langtoggle1");
+  buildLangToggle("langtoggle2");
   renderDict();
 }
 function logout(){
@@ -264,17 +346,18 @@ function buildChips(){
 }
 function renderDict(){
   buildChips();
+  buildLangToggle("langtoggle1");
   const items=TERMS.filter(t=>(cat==="すべて"||t.cat===cat)&&(!q||[t.term,t.read,t.py,t.js].join(" ").toLowerCase().includes(q.toLowerCase())));
   document.getElementById("entries").innerHTML=items.length?items.map(t=>`
     <div class="entry">
       <div class="entry-top"><b>${t.term}</b><span class="read">${t.read}</span><span class="tag">${t.cat}</span></div>
       <p>${t.def}</p>
-      <div class="pair">${codeHtml(t.py,"py")}${codeHtml(t.js,"js")}</div>
+      ${codeHtml(t)}
     </div>`).join(""):`<div class="empty">該当する用語が見つかりません</div>`;
 }
 document.getElementById("q").addEventListener("input",e=>{q=e.target.value;renderDict();});
 
-/* ---- card tab ---- */
+/* ---- learn tab: flashcards ---- */
 let ccat="すべて",deck=[],idx=0,flipped=false,ok=0,ng=0;
 function buildCardChips(){
   document.getElementById("cardchips").innerHTML=["すべて",...CATS].map(c=>
@@ -283,6 +366,7 @@ function buildCardChips(){
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function startDeck(){
   buildCardChips();
+  buildLangToggle("langtoggle2");
   deck=shuffle(ccat==="すべて"?TERMS:TERMS.filter(t=>t.cat===ccat));
   idx=0;ok=0;ng=0;
   document.getElementById("done").style.display="none";
@@ -290,6 +374,7 @@ function startDeck(){
   document.getElementById("answers").style.display="flex";
   document.getElementById("navrow").style.display="flex";
   updScore();showCard();
+  renderProgress();
 }
 function updScore(){document.getElementById("score").innerHTML=`<span class=o>✓ ${ok}</span> <span class=x>✗ ${ng}</span>`;}
 function showCard(){
@@ -305,9 +390,8 @@ function showCard(){
 function flip(){
   if(idx>=deck.length)return;
   flipped=!flipped;
-  const t=deck[idx];
   if(flipped){
-    document.getElementById("card").innerHTML=`<div class="lbl">裏</div><div class="def">${t.def}</div><div class="pair">${codeHtml(t.py,"py")}${codeHtml(t.js,"js")}</div>`;
+    flipBack();
     document.getElementById("answers").classList.remove("hide");
   }else{
     showCard();
@@ -317,6 +401,7 @@ function ans(yes){
   setProg(deck[idx].term,yes?"ok":"ng");
   if(yes)ok++;else ng++;
   updScore();
+  renderProgress();
   if(idx<deck.length-1){idx++;showCard();}else finish();
 }
 function step(d){const n=idx+d;if(n<0||n>=deck.length)return;idx=n;showCard();}
@@ -331,7 +416,7 @@ function finish(){
     <button onclick="startDeck()">もう一度やり直す</button>`;
 }
 
-/* ---- progress tab ---- */
+/* ---- learn tab: progress summary ---- */
 function renderProgress(){
   const p=prog();const total=TERMS.length;
   const o=TERMS.filter(t=>p[t.term]==="ok").length;
@@ -343,19 +428,21 @@ function renderProgress(){
     <div class="stat"><div class="n">${total-o-x}</div><div class="l">未学習</div></div>`;
   document.getElementById("rows").innerHTML=TERMS.map(t=>{
     const s=p[t.term];
-    const b=s==="ok"?'<span class="b o">覚えた</span>':s==="ng"?'<span class="b x">復習中</span>':'<span class="b u">未学習</span>';
+    const b=s==="ok"?'<span class="b o">覚えた</span>':s==="ng"?'<span class="b x">復習中</span>':'<span class="b">未学習</span>';
     return `<div class="row"><span>${t.term}</span>${b}</div>`;
   }).join("");
 }
 
 /* ---- tabs ---- */
 function showTab(t){
-  ["dict","cards","progress"].forEach(x=>{
+  ["dict","learn"].forEach(x=>{
     document.getElementById("nav-"+x).classList.toggle("on",x===t);
     document.getElementById(x).style.display=x===t?"flex":"none";
   });
-  if(t==="cards"&&deck.length===0)startDeck();
-  if(t==="progress")renderProgress();
+  if(t==="learn"){
+    if(deck.length===0)startDeck();
+    else renderProgress();
+  }
 }
 
 /* ---- boot ---- */
